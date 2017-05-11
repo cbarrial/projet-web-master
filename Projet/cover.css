@@ -1,0 +1,18 @@
+.frost{
+   background: rgba(245, 245, 245, 0.9);
+   height: 88px;
+   position: fixed;
+   width: 100%;
+   top: 0;
+   z-index: 1000;
+   -webkit-filter:blur(10px);
+   filter: url(#blur-effect-1);
+}
+
+.masthead {
+    z-index:1100;
+}
+
+body {
+    background: url(http://solohntr.com/wp-content/uploads/2014/12/blur-bg.jpg) no-repeat center center fixed;
+}
