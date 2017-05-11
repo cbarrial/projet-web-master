@@ -17,3 +17,9 @@ body {
     background: url("2015070812251641.jpg") no-repeat center center fixed;
     background-size: cover;
 }
+
+page-header {
+  padding-bottom: 9px;
+  margin: 40px 0 20px;
+  border-bottom: 1px solid #eee;
+}
