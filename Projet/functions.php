@@ -12,5 +12,5 @@ function connectMaBase(){
   {
           die('Erreur : ' . $e->getMessage());
   }
-
+}
 ?>

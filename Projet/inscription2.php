@@ -134,16 +134,20 @@ include("functions.php");
   </form>
 
 <?php
-
-var_dump($_POST);
-
 if(!empty($_POST['pseudo']))
 {
   // D'abord, je me connecte à la base de données.
-  connectMaBase();
+  try
+  {
+  	$bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
+  }
+  catch (Exception $e)
+  {
+          die('Erreur : ' . $e->getMessage());
+  }
   // Je mets aussi certaines sécurités ici…
-  $passe = $_POST['password'];
-  $passe2 = $_POST['vpassword'];
+  $passe = $_POST['passe'];
+  $passe2 = $_POST['passe2'];
 
   if($passe == $passe2)
   {
@@ -153,7 +157,14 @@ if(!empty($_POST['pseudo']))
 
     // Je vais crypter le mot de passe.
     $passe = sha1($passe);
-    mysql_query("INSERT INTO validation(id, nom, pseudo, passe, email) VALUES('', '$nom', '$pseudo', '$passe', '$email')") or die ('Erreur SQL !'.$sql.'<br />'.mysql_error());
+    // Insertion du message à l'aide d'une requête préparée
+    $req = $bdd->prepare('INSERT INTO validation (id, nom, pseudo, passe, email) VALUES(NULL, :nom, :pseudo, :passe, :email)');
+    $req->bindValue(':nom', $nom, PDO::PARAM_INT);
+    $req->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
+	  $req->bindValue(':passe', $passe, PDO::PARAM_STR);
+	  $req->bindValue(':email', $email, PDO::PARAM_STR);
+    $req->execute();
+
     //Le champ id est en auto_increment, on met donc '' dans le premier champ
     echo 'Vous êtes bien inscrit';
   }
@@ -161,8 +172,6 @@ if(!empty($_POST['pseudo']))
   {
     echo 'Les deux mots de passe que vous avez rentrés ne correspondent pas…';
   }
-
-  mysql_close();
 }
 ?>
 
