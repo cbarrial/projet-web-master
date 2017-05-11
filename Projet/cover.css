@@ -14,5 +14,6 @@
 }
 
 body {
-    background: url(http://solohntr.com/wp-content/uploads/2014/12/blur-bg.jpg) no-repeat center center fixed;
+    background: url("2015070812251641.jpg") no-repeat center center fixed;
+    background-size: cover;
 }
