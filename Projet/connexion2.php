@@ -1,3 +1,6 @@
+<?php
+include("functions.php");
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -72,11 +75,11 @@
 
                   <form method="post">
                     <div class="form-group">
-                      <div class="col-md-8"><input name="pseudo" placeholder="Idenfiant" class="form-control" type="text" id="UserUsername"/></div>
+                      <div class="col-md-8"><input  placeholder="Idenfiant" class="form-control" type="text" id="UserUsername" name="pseudo"/></div>
                     </div>
 
                     <div class="form-group">
-                      <div class="col-md-8"><input name="passe" placeholder="Mot de passe" class="form-control" type="password" id="UserPassword"/></div>
+                      <div class="col-md-8"><input placeholder="Mot de passe" class="form-control" type="password" id="UserPassword" name="passe"/></div>
                     </div>
 
                     <div class="form-group">
@@ -96,34 +99,45 @@
   </div>
 
     <?php
-    mysql_connect("localhost", "root", "");
-    mysql_select_db("nom_db");
-    $pseudo = mysql_real_escape_string(htmlspecialchars($_POST['pseudo']));
-    $passe = mysql_real_escape_string(htmlspecialchars($_POST['passe']));
-    // Je crypte $passe avec la fonction "sha1".
-    $passe = sha1($passe);
-    $nbre = mysql_query("SELECT COUNT(*) AS exist FROM connexion WHERE pseudo='$pseudo'");
-    $donnees = mysql_fetch_array($nbre);
-
-    if($donnees['exist'] != 0) // Si le pseudo existe.
+    if(!empty($_POST['pseudo']))
     {
-    $quete = mysql_query("SELECT * FROM connexion WHERE pseudo='$pseudo'");
-    $infos = mysql_fetch_array($quete);
 
-    if($passe == $infos['passe'])
+    try
     {
-      session_start();
-      $_SESSION['pseudo'] = $pseudo;
-
-      echo 'Vous etes bien logué';
-     include('connecté.html');
+    	$bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
+    }
+    catch (Exception $e)
+    {
+            die('Erreur : ' . $e->getMessage());
     }
 
-    else // Si le couple pseudo/ mot de passe n'est pas bon.
+
+    $pseudo=$_POST['pseudo'];
+    $passe=sha1($_POST['passe']);
+
+    // Vérification des identifiants
+    $req = $bdd->prepare('SELECT id FROM validation WHERE pseudo = :pseudo AND passe = :passe');
+    //$req->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
+    //$req->bindValue(':pseudo', $passe, PDO::PARAM_STR);
+    //$req->execute();
+    $req->execute(array(
+        'pseudo' => $pseudo,
+        'passe' => $passe));
+
+    $resultat=$req->fetch();
+
+    if (!$resultat)
     {
-    echo 'Vous n\'avez pas rentré les bons identifiants';
+    echo 'Mauvais identifiant ou mot de passe !';
     }
+    else
+    {
+    session_start();
+    $_SESSION['id'] = $resultat['id'];
+    $_SESSION['pseudo'] = $pseudo;
+    echo 'Vous êtes bien connecté !';
     }
+  }
     ?>
 
           <div class="mastfoot">
