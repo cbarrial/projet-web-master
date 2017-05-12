@@ -52,10 +52,10 @@ include("functions.php");
               <h3 class="masthead-brand">Pétitions</h3>
               <nav>
                 <ul class="nav masthead-nav">
-                  <li role="presentation"><a href="pageacceuil.html">Accueil</a></li>
-                  <li role="presentation"><a href="decpet.html">Parcourir</a></li>
-                  <li role="presentation"><a href="connexion2.html">Connexion</a></li>
-                  <li role="presentation" class="active"><a href="inscription.html">Inscription</a></li>
+                  <li role="presentation"><a href="pageacceuil.php">Accueil</a></li>
+                  <li role="presentation"><a href="Petitions.html">Parcourir</a></li>
+                  <li role="presentation"><a href="connexion2.php">Connexion</a></li>
+                  <li role="presentation" class="active"><a href="inscription2.php">Inscription</a></li>
                 </ul>
               </nav>
             </div>

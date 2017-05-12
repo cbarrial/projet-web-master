@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if (empty($_SESSION['id'] OR $_SESSION['pseudo']))
+{
+  header('Location: /Projet/pageacceuil.html');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -65,7 +74,7 @@
             <h1 class="cover-heading">Mobilisez vous</h1>
             <p class="lead">Vous pouvez ici signer des pétitions ou encore en créer !</p>
             <p class="lead">
-              <a href="connexion2.php" class="btn btn-lg btn-default">Créer votre pétition</a>
+              <a href="Petitions.html" class="btn btn-lg btn-default">Créer votre pétition</a>
             </p>
           </div>
 

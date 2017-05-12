@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("functions.php");
 ?>
 <!DOCTYPE html>
@@ -52,8 +53,8 @@ include("functions.php");
               <h3 class="masthead-brand">Pétitions</h3>
               <nav>
                 <ul class="nav masthead-nav">
-                  <li role="presentation"><a href="pageacceuil.html">Accueil</a></li>
-                  <li role="presentation"><a href="decpet.html">Parcourir</a></li>
+                  <li role="presentation"><a href="pageacceuil.php">Accueil</a></li>
+                  <li role="presentation"><a href="Petitions.html">Parcourir</a></li>
                   <li role="presentation" class="active"><a href="connexion2.html">Connexion</a></li>
                   <li role="presentation"><a href="inscription2.php">Inscription</a></li>
                 </ul>
@@ -132,7 +133,6 @@ include("functions.php");
     }
     else
     {
-    session_start();
     $_SESSION['id'] = $resultat['id'];
     $_SESSION['pseudo'] = $pseudo;
     echo 'Vous êtes bien connecté !';
