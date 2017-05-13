@@ -54,7 +54,7 @@ $req->execute(array(
 <body background = "/net/t/cbarrial/Prog_Web/Projet/inscrip.jpg">
 
     <div class="site-wrapper">
-    <div class = "frost"> </div>
+    
       <div class="site-wrapper-inner">
 
         <div class="cover-container">

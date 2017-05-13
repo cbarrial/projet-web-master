@@ -40,10 +40,9 @@ include("functions.php");
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-<body background = "/davs://cbarrial.davpedago.enseirb.fr/Projet/manif.jpg">
+<body>
 
     <div class="site-wrapper">
-    <div class = "frost"> </div>
       <div class="site-wrapper-inner">
 
         <div class="cover-container">
