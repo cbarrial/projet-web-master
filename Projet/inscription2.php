@@ -132,6 +132,72 @@ include("functions.php");
     </div>
   </form>
 
+  <?php
+  if(!empty($_POST['pseudo']))
+  {
+    // D'abord, je me connecte à la base de données.
+    try
+    {
+    	$bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
+    }
+    catch (Exception $e)
+    {
+            die('Erreur : ' . $e->getMessage());
+    }
+    // Je mets aussi certaines sécurités ici…
+    $passe = $_POST['passe'];
+    $passe2 = $_POST['passe2'];
+
+    if($passe == $passe2)
+    {
+      $nom = $_POST['nom'];
+      $pseudo = $_POST['pseudo'];
+      $email = $_POST['email'];
+
+      // Je vais crypter le mot de passe.
+      $passe = sha1($passe);
+      // Insertion du message à l'aide d'une requête préparée
+      $req = $bdd->prepare('INSERT INTO validation (id, nom, pseudo, passe, email) VALUES(NULL, :nom, :pseudo, :passe, :email)');
+      $req->bindValue(':nom', $nom, PDO::PARAM_INT);
+      $req->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
+  	  $req->bindValue(':passe', $passe, PDO::PARAM_STR);
+  	  $req->bindValue(':email', $email, PDO::PARAM_STR);
+      $req->execute();
+
+      //Le champ id est en auto_increment, on met donc '' dans le premier champ
+      echo 'Vous êtes bien inscrit';
+    }
+    else
+    {
+      echo 'Les deux mots de passe que vous avez rentrés ne correspondent pas…';
+    }
+  }
+  ?>
+
+          <div class="mastfoot">
+            <div class="inner">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+
+</body>
+</html>
+
 <?php
 if(!empty($_POST['pseudo']))
 {
@@ -173,27 +239,3 @@ if(!empty($_POST['pseudo']))
   }
 }
 ?>
-
-          <div class="mastfoot">
-            <div class="inner">
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-
-
-</body>
-</html>

@@ -2,11 +2,11 @@
 session_start();
 include("functions.php");
 
-/*if (!empty($_SESSION['id'] OR $_SESSION['pseudo']))
+if (empty($_SESSION['id'] OR $_SESSION['pseudo']))
 {                                                         //Cette ligne fait buguer la page donc corrige fdp
-  header('Location: /pageacceuil.php');
+  header('Location: /Projet/pageacceuil.php');
 }
-*/
+
 ?>
 
 <!DOCTYPE html>
