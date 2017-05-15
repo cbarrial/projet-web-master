@@ -57,64 +57,61 @@
             </nav>
           </div>
         </div>
-        <div style='position: absolute; top: 150px; left: 320px'>
-          <ul class="nav nav-tabs" style="color: #808080">
-            <li role="presentation" class="active"  style="color: #8080"><a href="#">Pétitions</a></li>
-            <li role="presentation" style="color: #8080"><a href="PetitionsPolitiques.php">Pétitions Politiques</a></li>
-            <li role="presentation" style="color: #8080"><a href="PetitionsEducation.php">Pétitions Education</a></li>
-            <li role="presentation" style="color: #8080"><a href='PetitionsFeministes.php'>Pétitions Feministes</a></li>
-            <li role="presentation" style="color: #8080"><a href='PetitionsSports.php'>Pétitions Sports</a></li>
-            <li role="presentation" style="color: #8080"><a href='PetitionsJustice.php'>Pétitions Justice</a></li>
-            <li role="presentation" style="color: #8080"><a href='PetitionsEnvironment.php'>Pétitions Environment</a></li>
-          </ul>
-        </div>
-      </nav>
+          <div style='position: absolute; top: 150px; left: 320px'>
+            <ul class="nav nav-tabs" style="color: #808080">
+          <li role="presentation" class="active"  style="color: #8080"><a href="Petitions.php">Pétitions</a></li>
+          <li role="presentation" style="color: #8080"><a href="PetitionsPolitiques.php">Pétitions Politiques</a></li>
+          <li role="presentation" style="color: #8080"><a href="PetitionsEducation.php">Pétitions Education</a></li>
+          <li role="presentation" style="color: #8080" class="active"><a href='#'>Pétitions Feministes</a></li>
+          <li role="presentation" style="color: #8080"><a href='PetitionsSports.php'>Pétitions Sports</a></li>
+          <li role="presentation" style="color: #8080"><a href='PetitionsJustice.php'>Pétitions Justice</a></li>
+          <li role="presentation" style="color: #8080"><a href='PetitionsEnvironment.php'>Pétitions Environment</a></li>
+        </ul>
+      </div>
+    </nav>
 
 
-      <div class="row" style="margin-top: 200px; ">
-      <?php
-      try
-      {
-        $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
-      }
-      catch (Exception $e)
-      {
-              die('Erreur : ' . $e->getMessage());
-      }
+    <div class="row" style="margin-top: 200px; ">
+    <?php
+    try
+    {
+      $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
+    }
+    catch (Exception $e)
+    {
+            die('Erreur : ' . $e->getMessage());
+    }
 
-      $pet=$bdd->query('SELECT Titre, Texte FROM petitions ORDER BY ID DESC LIMIT 0, 3');
+    $pet=$bdd->query('SELECT Titre, Texte FROM petitions WHERE categorie=\'feministe\' ORDER BY ID DESC LIMIT 0, 3');
 
-      while ($donnees = $pet->fetch())
-      {
-        ?>
+    while ($donnees = $pet->fetch())
+    {
+      ?>
 
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <!-- <div style=" width: 242px; height: 200px; background:url(usain-bolt-pose2.jpg); background-size: cover"></div> -->
-            <img src="usain-bolt-pose2.jpg" alt="erreur">
-            <div class="caption">
-              <?php echo '<h3>' . htmlspecialchars($donnees['Titre']) . '</h3>'; ?>
-              <?php echo '<p>' . htmlspecialchars($donnees['Texte']) . '</p>'; ?>
-              <p><a href="#" class="btn btn-primary" role="button">Consulter</a> <a href="#" class="btn btn-default" role="button">Modifier</a></p>
-            </div>
+      <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+          <!-- <div style=" width: 242px; height: 200px; background:url(usain-bolt-pose2.jpg); background-size: cover"></div> -->
+          <img src="usain-bolt-pose2.jpg" alt="erreur">
+          <div class="caption">
+            <?php echo '<h3>' . htmlspecialchars($donnees['Titre']) . '</h3>'; ?>
+            <?php echo '<p>' . htmlspecialchars($donnees['Texte']) . '</p>'; ?>
+            <p><a href="#" class="btn btn-primary" role="button">Consulter</a> <a href="#" class="btn btn-default" role="button">Modifier</a></p>
           </div>
         </div>
-
-        <?php
-        }
-
-        $pet->closeCursor();
-        ?>
-
       </div>
 
+      <?php
+      }
 
-
+      $pet->closeCursor();
+      ?>
 
     </div>
+
   </div>
 </div>
-</div>
-</div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

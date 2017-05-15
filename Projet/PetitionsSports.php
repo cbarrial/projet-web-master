@@ -57,19 +57,17 @@
             </nav>
           </div>
         </div>
-        <div style='position: absolute; top: 150px; left: 320px'>
-          <ul class="nav nav-tabs" style="color: #808080">
-            <li role="presentation" class="active"  style="color: #8080"><a href="#">Pétitions</a></li>
-            <li role="presentation" style="color: #8080"><a href="PetitionsPolitiques.php">Pétitions Politiques</a></li>
-            <li role="presentation" style="color: #8080"><a href="PetitionsEducation.php">Pétitions Education</a></li>
-            <li role="presentation" style="color: #8080"><a href='PetitionsFeministes.php'>Pétitions Feministes</a></li>
-            <li role="presentation" style="color: #8080"><a href='PetitionsSports.php'>Pétitions Sports</a></li>
-            <li role="presentation" style="color: #8080"><a href='PetitionsJustice.php'>Pétitions Justice</a></li>
-            <li role="presentation" style="color: #8080"><a href='PetitionsEnvironment.php'>Pétitions Environment</a></li>
-          </ul>
-        </div>
-      </nav>
-
+          <div style='position: absolute; top: 150px; left: 320px'>
+            <ul class="nav nav-tabs" style="color: #808080">
+          <li role="presentation" class="active"  style="color: #8080"><a href="Petitions.php">Pétitions</a></li>
+          <li role="presentation" style="color: #8080"><a href="PetitionsPolitiques.php">Pétitions Politiques</a></li>
+          <li role="presentation" style="color: #8080"><a href="PetitionsEducation.php">Pétitions Education</a></li>
+          <li role="presentation" style="color: #8080"><a href='PetitionsFeministes.php'>Pétitions Feministes</a></li>
+          <li role="presentation" style="color: #8080" class="active"><a href='#'>Pétitions Sports</a></li>
+          <li role="presentation" style="color: #8080"><a href='PetitionsJustice.php'>Pétitions Justice</a></li>
+          <li role="presentation" style="color: #8080"><a href='PetitionsEnvironment.php'>Pétitions Environment</a></li>
+        </ul>
+      </div>
 
       <div class="row" style="margin-top: 200px; ">
       <?php
@@ -82,7 +80,7 @@
               die('Erreur : ' . $e->getMessage());
       }
 
-      $pet=$bdd->query('SELECT Titre, Texte FROM petitions ORDER BY ID DESC LIMIT 0, 3');
+      $pet=$bdd->query('SELECT Titre, Texte FROM petitions WHERE categorie=\'sport\' ORDER BY ID DESC LIMIT 0, 3');
 
       while ($donnees = $pet->fetch())
       {
@@ -108,13 +106,11 @@
 
       </div>
 
-
-
-
-    </div>
+    </nav>
   </div>
 </div>
-</div>
-</div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

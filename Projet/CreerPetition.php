@@ -1,5 +1,33 @@
 <?php
 session_start();
+if(!empty($_POST['titre']))
+{
+  try
+  {
+    $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
+  }
+  catch (Exception $e)
+  {
+          die('Erreur : ' . $e->getMessage());
+  }
+
+  $titre=$_POST['titre'];
+  $petition=$_POST['text'];
+  $pseudo=$_SESSION['pseudo'];
+  $categorie=$_POST['categorie'];
+
+
+  $req = $bdd->prepare('INSERT INTO petitions (id, Titre, Texte, Createur, Categorie) VALUES(NULL, :titre, :petition, :createur, :categorie)') or die(print_r($bdd->errorInfo()));
+  $req->bindValue(':titre', $titre, PDO::PARAM_STR);
+  $req->bindValue(':petition', $petition, PDO::PARAM_STR);
+  $req->bindValue(':createur', $pseudo, PDO::PARAM_STR);
+  $req->bindValue(':categorie', $categorie, PDO::PARAM_STR);
+  $req->execute();
+
+
+  header('Location: /Projet/Petitions.php');
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -54,7 +82,7 @@ session_start();
             <nav>
               <ul class="nav masthead-nav">
                 <li role="presentation" class="active"><a href="pageacceuil.php">Accueil</a></li>
-                <li role="presentation"><a href="Petitions.html">Parcourir</a></li>
+                <li role="presentation"><a href="Petitions.php">Parcourir</a></li>
                 <li role="presentation"><a href="connexion2.php">Connexion</a></li>
                 <li><a href="inscription2.php">Inscription</a></li>
               </ul>
@@ -86,35 +114,7 @@ session_start();
           <button type="submit" class="btn btn-primary">Soumettre</button>
         </form>
 
-        <?php
-        if(!empty($_POST['titre']))
-        {
-          try
-          {
-          	$bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
-          }
-          catch (Exception $e)
-          {
-                  die('Erreur : ' . $e->getMessage());
-          }
 
-          $titre=$_POST['titre'];
-          $petition=$_POST['text'];
-          $pseudo=$_SESSION['pseudo'];
-          $categorie=$_POST['categorie'];
-
-
-          $req = $bdd->prepare('INSERT INTO petitions (id, Titre, Texte, Createur, Categorie) VALUES(NULL, :titre, :petition, :createur, :categorie)') or die(print_r($bdd->errorInfo()));
-          $req->bindValue(':titre', $titre, PDO::PARAM_STR);
-          $req->bindValue(':petition', $petition, PDO::PARAM_STR);
-          $req->bindValue(':createur', $pseudo, PDO::PARAM_STR);
-          $req->bindValue(':categorie', $categorie, PDO::PARAM_STR);
-          $req->execute();
-
-
-          echo ;
-        }
-          ?>
         <div class="mastfoot">
           <div class="inner">
           </div>
