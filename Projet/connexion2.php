@@ -1,7 +1,44 @@
 <?php
-session_start();
-include("functions.php");
+if(!empty($_POST['pseudo']))
+{
+
+try
+{
+  $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
+}
+catch (Exception $e)
+{
+        die('Erreur : ' . $e->getMessage());
+}
+
+
+$pseudo=$_POST['pseudo'];
+$passe=sha1($_POST['passe']);
+
+// Vérification des identifiants
+$req = $bdd->prepare('SELECT id FROM validation WHERE pseudo = :pseudo AND passe = :passe');
+//$req->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
+//$req->bindValue(':pseudo', $passe, PDO::PARAM_STR);
+//$req->execute();
+$req->execute(array(
+    'pseudo' => $pseudo,
+    'passe' => $passe));
+
+$resultat=$req->fetch();
+
+if (!$resultat)
+{
+echo 'Mauvais identifiant ou mot de passe !';
+}
+else
+{
+$_SESSION['id'] = $resultat['id'];
+$_SESSION['pseudo'] = $pseudo;
+header('Location: /Projet/connecté.html');
+}
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -98,46 +135,7 @@ include("functions.php");
   </div>
   </div>
 
-    <?php
-    if(!empty($_POST['pseudo']))
-    {
 
-    try
-    {
-    	$bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
-    }
-    catch (Exception $e)
-    {
-            die('Erreur : ' . $e->getMessage());
-    }
-
-
-    $pseudo=$_POST['pseudo'];
-    $passe=sha1($_POST['passe']);
-
-    // Vérification des identifiants
-    $req = $bdd->prepare('SELECT id FROM validation WHERE pseudo = :pseudo AND passe = :passe');
-    //$req->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
-    //$req->bindValue(':pseudo', $passe, PDO::PARAM_STR);
-    //$req->execute();
-    $req->execute(array(
-        'pseudo' => $pseudo,
-        'passe' => $passe));
-
-    $resultat=$req->fetch();
-
-    if (!$resultat)
-    {
-    echo 'Mauvais identifiant ou mot de passe !';
-    }
-    else
-    {
-    $_SESSION['id'] = $resultat['id'];
-    $_SESSION['pseudo'] = $pseudo;
-    echo 'Vous êtes bien connecté !';
-    }
-  }
-    ?>
 
           <div class="mastfoot">
             <div class="inner">

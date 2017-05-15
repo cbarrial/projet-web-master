@@ -76,7 +76,7 @@ if (empty($_SESSION['id'] OR $_SESSION['pseudo']))
             <h1 class="cover-heading">Mobilisez vous</h1>
             <p class="lead">Vous pouvez ici signer des pétitions ou encore en créer !</p>
             <p class="lead">
-              <a href="CreerPetition.html" class="btn btn-lg btn-default">Créer votre pétition</a>
+              <a href="CreerPetition.php" class="btn btn-lg btn-default">Créer votre pétition</a>
             </p>
           </div>
 

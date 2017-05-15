@@ -69,47 +69,47 @@
           </ul>
         </div>
       </nav>
-      <div class="row" style="margin-top: 130px; ">
+
+
+      <div class="row" style="margin-top: 200px; ">
+      <?php
+      try
+      {
+        $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
+      }
+      catch (Exception $e)
+      {
+              die('Erreur : ' . $e->getMessage());
+      }
+
+      $pet=$bdd->query('SELECT Titre, Texte FROM petitions ORDER BY ID DESC LIMIT 0, 3');
+
+      while ($donnees = $pet->fetch())
+      {
+        ?>
+
         <div class="col-sm-6 col-md-4">
           <div class="thumbnail">
             <!-- <div style=" width: 242px; height: 200px; background:url(usain-bolt-pose2.jpg); background-size: cover"></div> -->
             <img src="usain-bolt-pose2.jpg" alt="erreur">
             <div class="caption">
-              <h3>Usain Bolt</h3>
-              <p>Wallah j'ai juré lui il court vite. Faudrait qu'il ralentisse de temps en temps y a des limitations de vitesse wsh.</p>
+              <?php echo '<h3>' . htmlspecialchars($donnees['Titre']) . '</h3>'; ?>
+              <?php echo '<p>' . htmlspecialchars($donnees['Texte']) . '</p>'; ?>
               <p><a href="#" class="btn btn-primary" role="button">Consulter</a> <a href="#" class="btn btn-default" role="button">Modifier</a></p>
             </div>
           </div>
         </div>
 
+        <?php
+        }
 
-
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <img src="Donald-Trump2.jpg" alt="erreur">
-            <div class="caption">
-              <h3>Donald Trump</h3>
-              <p>Ce bon gros fdp de mort il peut aller construire son mur. Le mec c'est cru dans Game Of Throne avec le Mexique . Il fait pas froid au mexique sang de tes morts.</p>
-              <p><a href="#" class="btn btn-primary" role="button">Consulter</a> <a href="#" class="btn btn-default" role="button">Modifier</a></p>
-            </div>
-          </div>
-        </div>
-
-
-
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <img src="Macron2.jpg" alt="erreur">
-            <div class="caption">
-              <h3>Emmanuel Macron</h3>
-              <p>"Elle se déboite les babines quand elle suce le dinausore." K2A un grand poète à la Arthur Rimbaud</p>
-              <p><a href="#" class="btn btn-primary" role="button">Consulter</> <a href="#" class="btn btn-default" role="button">Modifier</a></p>
-            </div>
-          </div>
-        </div>
-
+        $pet->closeCursor();
+        ?>
 
       </div>
+
+
+
 
     </div>
   </div>

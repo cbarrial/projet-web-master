@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -66,19 +69,19 @@
           </div>
           <div class="form-group">
             <label for="exampleSelect1">Catégorie de Pétition</label>
-            <select class="form-control" id="exampleSelect1">
-              <option>Pétition Politique</option>
-              <option>Pétition Féministe</option>
-              <option>Pétition Justice</option>
-              <option>Pétition Education</option>
-              <option>Pétition Environment</option>
-              <option>Pétition Sport</option>
-              <option>Nouvelle Catégorie</option>
+            <select name="categorie" class="form-control" id="exampleSelect1">
+              <option value="politique">Pétition Politique</option>
+              <option value="feministe">Pétition Féministe</option>
+              <option value="justice">Pétition Justice</option>
+              <option value="education">Pétition Education</option>
+              <option value="environment">Pétition Environment</option>
+              <option value="sport">Pétition Sport</option>
+              <option value="nouvelle">Nouvelle Catégorie</option>
             </select>
           </div>
           <div class="form-group">
             <label for="exampleTextarea">Votre Pétition</label>
-            <textarea class="form-control" id="exampleTextarea" rows="3">Ecrivez votre Pétition...</textarea>
+            <textarea name="text" class="form-control" id="exampleTextarea" rows="3">Ecrivez votre Pétition...</textarea>
           </div>
           <button type="submit" class="btn btn-primary">Soumettre</button>
         </form>
@@ -96,20 +99,20 @@
           }
 
           $titre=$_POST['titre'];
-          //$pétition=$_POST['text'];
+          $petition=$_POST['text'];
+          $pseudo=$_SESSION['pseudo'];
+          $categorie=$_POST['categorie'];
 
 
-          $req = $bdd->prepare('INSERT INTO pétitions (id, titre, pétition, créateur) VALUES(NULL, :titre, NULL, NULL)') or die(print_r($bdd->errorInfo()));
+          $req = $bdd->prepare('INSERT INTO petitions (id, Titre, Texte, Createur, Categorie) VALUES(NULL, :titre, :petition, :createur, :categorie)') or die(print_r($bdd->errorInfo()));
           $req->bindValue(':titre', $titre, PDO::PARAM_STR);
-          //$req->bindValue(':pétition', $pétition, PDO::PARAM_STR);
-          //$req->bindValue(':créateur', $pseudo, PDO::PARAM_STR);
+          $req->bindValue(':petition', $petition, PDO::PARAM_STR);
+          $req->bindValue(':createur', $pseudo, PDO::PARAM_STR);
+          $req->bindValue(':categorie', $categorie, PDO::PARAM_STR);
           $req->execute();
-          /*$req->execute(array(
-              'titre' => $titre,
-              'pétition' => $pétition));*/
 
 
-          echo 'votre pétition à bien été créée';
+          echo ;
         }
           ?>
         <div class="mastfoot">
