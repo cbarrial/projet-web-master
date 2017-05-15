@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <form>
+        <form method='post'>
           <div class="form-group">
             <label for="exampleInputPassword1">Titre de votre Pétition</label>
             <input type="Titre de la pétition..." class="form-control" id="exampleInputPassword1" placeholder="Titre de la pétition..." name="titre">
@@ -78,15 +78,14 @@
           </div>
           <div class="form-group">
             <label for="exampleTextarea">Votre Pétition</label>
-            <textarea class="form-control" id="exampleTextarea" rows="3" name="text">Ecrivez votre Pétition...</textarea>
+            <textarea class="form-control" id="exampleTextarea" rows="3">Ecrivez votre Pétition...</textarea>
           </div>
           <button type="submit" class="btn btn-primary">Soumettre</button>
         </form>
 
         <?php
-        if(!empty($_POST['pseudo']))
+        if(!empty($_POST['titre']))
         {
-          // D'abord, je me connecte à la base de données.
           try
           {
           	$bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
@@ -97,16 +96,22 @@
           }
 
           $titre=$_POST['titre'];
-          $pétition=$_POST['text'];
-          $pseudo=$_SESSION['pseudo'];
+          //$pétition=$_POST['text'];
 
-          $req = $bdd->prepare('INSERT INTO Pétitions (id, titre, pétition, créateur) VALUES(NULL, :titre, :pétition, :créateur)');
+
+          $req = $bdd->prepare('INSERT INTO pétitions (id, titre, pétition, créateur) VALUES(NULL, :titre, NULL, NULL)') or die(print_r($bdd->errorInfo()));
           $req->bindValue(':titre', $titre, PDO::PARAM_STR);
-          $req->bindValue(':pétition', $pétition, PDO::PARAM_STR);
-          $req->bindValue(':créateur', $pseudo, PDO::PARAM_STR);
+          //$req->bindValue(':pétition', $pétition, PDO::PARAM_STR);
+          //$req->bindValue(':créateur', $pseudo, PDO::PARAM_STR);
           $req->execute();
-          ?>
+          /*$req->execute(array(
+              'titre' => $titre,
+              'pétition' => $pétition));*/
 
+
+          echo 'votre pétition à bien été créée';
+        }
+          ?>
         <div class="mastfoot">
           <div class="inner">
           </div>
