@@ -18,6 +18,9 @@
     {
       $ret = false;
       $img_blob = '';
+      $img_taille = 0;
+      $img_type = '';
+      $img_nom = '';
       $taille_max = 250000;
 
       $ret = is_uploaded_file ($_FILES['fic']['tmp_name']);
@@ -37,6 +40,22 @@
           }
           $img_type = $_FILES['fic']['type'];
           $img_nom = $_FILES['fic']['name'];
+          try
+          {
+          	$bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
+          }
+          catch (Exception $e)
+          {
+                  die('Erreur : ' . $e->getMessage());
+          }
+
+          $req =$bdd->prepare( "INSERT INTO image (img_id, img_nom, img_taille, img_type, img_blob)
+                              VALUES (NULL, :img_nom, :img_taille, :img_type, :img_blob, addslashes ($img_blob)) ");
+          $req->bindValue(':img_nom', $img_nom, PDO::PARAM_STR);
+          $req->bindValue(':img_taille', $img_taille, PDO::PARAM_STR);
+          $req->bindValue(':img_type', $img_type, PDO::PARAM_STR);
+          $req->bindValue(':img_blob', $img_blob, PDO::PARAM_STR);
+          $req->execute();
         }
       }
 

@@ -24,6 +24,11 @@ if(!empty($_POST['titre']))
   $req->bindValue(':categorie', $categorie, PDO::PARAM_STR);
   $req->execute();
 
+  include ("functions.php");
+  if ( isset($_FILES['fic']) )
+  {
+    transfert();
+  }
 
   header('Location: /Projet/Petitions.php');
 }
