@@ -96,6 +96,7 @@ if(!empty($_POST['pseudo']))
                   <li role="presentation"><a href="Petitions.html">Parcourir</a></li>
                   <li role="presentation"><a href="connexion2.php">Connexion</a></li>
                   <li role="presentation" class="active"><a href="inscription2.php">Inscription</a></li>
+                  <li><a href="deconnexion.php"><input type="button" class="btn btn-success btn btn-success" value="Déconnexion"></a></li>
                 </ul>
               </nav>
             </div>

@@ -53,6 +53,7 @@
                 <li role="presentation" class="active"><a href="Petitions.html">Parcourir</a></li>
                 <li role="presentation"><a href="connexion2.php">Connexion</a></li>
                 <li><a href="inscription2.php">Inscription</a></li>
+                <li><a href="deconnexion.php"><input type="button" class="btn btn-success btn btn-success" value="Déconnexion"></a></li>
               </ul>
             </nav>
           </div>
@@ -94,7 +95,7 @@
             <img src="usain-bolt-pose2.jpg" alt="erreur">
             <div class="caption">
               <?php echo '<h3>' . htmlspecialchars($donnees['Titre']) . '</h3>'; ?>
-              <?php echo '<p>' . htmlspecialchars($donnees['Texte']) . '</p>'; ?>
+              <?php echo '<p>' . htmlspecialchars(substr($donnees['Texte'],0,100)) . '</p>'; ?>
               <p><a href="#" class="btn btn-primary" role="button">Consulter</a> <a href="#" class="btn btn-default" role="button">Modifier</a></p>
             </div>
           </div>

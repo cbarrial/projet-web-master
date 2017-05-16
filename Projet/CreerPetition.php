@@ -90,7 +90,7 @@ if(!empty($_POST['titre']))
           </div>
         </div>
 
-        <form method='post'>
+        <form enctype="multipart/form-data" method='post'>
           <div class="form-group">
             <label for="exampleInputPassword1">Titre de votre Pétition</label>
             <input type="Titre de la pétition..." class="form-control" id="exampleInputPassword1" placeholder="Titre de la pétition..." name="titre">
@@ -110,6 +110,11 @@ if(!empty($_POST['titre']))
           <div class="form-group">
             <label for="exampleTextarea">Votre Pétition</label>
             <textarea name="text" class="form-control" id="exampleTextarea" rows="3">Ecrivez votre Pétition...</textarea>
+          </div>
+          <div class="form-group">
+            <label for="exampleTextarea">Ajoutez une image</label>
+            <input type="hidden" name="MAX_FILE_SIZE" value="250000" />
+            <input type="file" name="fic" size=50 />
           </div>
           <button type="submit" class="btn btn-primary">Soumettre</button>
         </form>

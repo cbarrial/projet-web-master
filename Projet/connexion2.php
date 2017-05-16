@@ -90,9 +90,10 @@ header('Location: /Projet/connecté.html');
               <nav>
                 <ul class="nav masthead-nav">
                   <li role="presentation"><a href="pageacceuil.php">Accueil</a></li>
-                  <li role="presentation"><a href="Petitions.html">Parcourir</a></li>
-                  <li role="presentation" class="active"><a href="connexion2.html">Connexion</a></li>
+                  <li role="presentation"><a href="Petitions.php">Parcourir</a></li>
+                  <li role="presentation" class="active"><a href="#">Connexion</a></li>
                   <li role="presentation"><a href="inscription2.php">Inscription</a></li>
+                  <li><a href="deconnexion.php"><input type="button" class="btn btn-success btn btn-success" value="Déconnexion"></a></li>
                 </ul>
               </nav>
             </div>
