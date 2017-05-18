@@ -53,65 +53,21 @@
                 <li role="presentation" class="active"><a href="Petitions.html">Parcourir</a></li>
                 <li role="presentation"><a href="connexion2.php">Connexion</a></li>
                 <li><a href="inscription2.php">Inscription</a></li>
-                <li><a href="deconnexion.php"><input type="button" class="btn btn-success btn btn-success" value="Déconnexion"></a></li>
               </ul>
             </nav>
           </div>
         </div>
           <div style='position: absolute; top: 150px; left: 320px'>
             <ul class="nav nav-tabs" style="color: #808080">
-          <li role="presentation" class="active"  style="color: #8080"><a href="Petitions.php">Pétitions</a></li>
+          <li role="presentation" class="active"  style="color: #8080"><a href="Petitions.html">Pétitions</a></li>
           <li role="presentation" style="color: #8080" class="active"><a href="#">Pétitions Politiques</a></li>
-          <li role="presentation" style="color: #8080"><a href="PetitionsEducation.php">Pétitions Education</a></li>
-          <li role="presentation" style="color: #8080"><a href='PetitionsFeministes.php'>Pétitions Feministes</a></li>
-          <li role="presentation" style="color: #8080"><a href='PetitionsSports.php'>Pétitions Sports</a></li>
-          <li role="presentation" style="color: #8080"><a href='PetitionsJustice.php'>Pétitions Justice</a></li>
-          <li role="presentation" style="color: #8080"><a href='PetitionsEnvironment.php'>Pétitions Environment</a></li>
+          <li role="presentation" style="color: #8080"><a href="PetitionsEducation.html">Pétitions Education</a></li>
+          <li role="presentation" style="color: #8080"><a href='PetitionsFeministes.html'>Pétitions Feministes</a></li>
+          <li role="presentation" style="color: #8080"><a href='PetitionsSports.html'>Pétitions Sports</a></li>
+          <li role="presentation" style="color: #8080"><a href='PetitionsJustice.html'>Pétitions Justice</a></li>
+          <li role="presentation" style="color: #8080"><a href='PetitionsEnvironment.html'>Pétitions Environment</a></li>
         </ul>
       </div>
-
-      <div class="row" style="margin-top: 200px; ">
-      <?php
-      try
-      {
-        $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
-      }
-      catch (Exception $e)
-      {
-              die('Erreur : ' . $e->getMessage());
-      }
-
-      $pet=$bdd->query('SELECT Titre, Texte, id FROM petitions WHERE categorie=\'politique\' ORDER BY ID DESC LIMIT 0, 3');
-
-      while ($donnees = $pet->fetch())
-      {
-        ?>
-
-        <form action="Pagepetition.php" method="post">
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail">
-            <!-- <div style=" width: 242px; height: 200px; background:url(usain-bolt-pose2.jpg); background-size: cover"></div> -->
-            <img src="Macron2.jpg" alt="erreur">
-            <div class="caption">
-              <input type="hidden" name="id" value="<?php echo $donnees['id'] ?>" />
-              <input type="hidden" name="titre" value="<?php echo $donnees['Titre'] ?>" />
-              <input type="hidden" name="texte" value="<?php echo $donnees['Texte'] ?>" />
-              <?php echo '<h3>' . htmlspecialchars($donnees['Titre']) . '</h3>'; ?>
-              <?php echo '<p>' . htmlspecialchars(substr($donnees['Texte'],0,100)) . '</p>'; ?>
-              <button type="submit" class="btn btn-primary">Consulter</button>
-            </div>
-          </div>
-        </div>
-        </form>
-
-        <?php
-        }
-
-        $pet->closeCursor();
-        ?>
-
-      </div>
-
     </nav>
   </div>
 </div>

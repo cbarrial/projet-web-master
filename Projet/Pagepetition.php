@@ -1,3 +1,35 @@
+<?php
+session_start();
+include("functions.php");
+
+if (empty($_SESSION['id'] OR $_SESSION['pseudo']))
+{                                                         //Cette ligne fait buguer la page donc corrige fdp
+  header('Location: /Projet/connexion.php');
+}
+
+
+try
+{
+  $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
+}
+catch (Exception $e)
+{
+        die('Erreur : ' . $e->getMessage());
+}
+
+if (isset($_POST['id'])){
+$titre=$_POST['titre'];
+$texte=$_POST['texte'];
+$id=$_POST['id'];
+
+$req=$bdd->prepare('SELECT Signatures FROM petitions WHERE id=:id');
+$req->bindValue(':id', $id, PDO::PARAM_INT);
+$req->execute();
+
+$resultat=$req->fetch();
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -25,7 +57,7 @@
 
     <!-- Custom styles for this template -->
     <link href="cover2.css" rel="stylesheet">
-    <link href="cover.css" rel="stylesheet">
+    <!--<link href="cover.css" rel="stylesheet">-->
 
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
@@ -51,7 +83,7 @@
               <nav>
                 <ul class="nav masthead-nav">
                   <li role="presentation" class="active"><a href="pageacceuil.php">Accueil</a></li>
-                  <li role="presentation"><a href="Petitions.html">Parcourir</a></li>
+                  <li role="presentation"><a href="Petitions.php">Parcourir</a></li>
                   <li role="presentation"><a href="connexion2.php">Connexion</a></li>
                   <li><a href="inscription2.php">Inscription</a></li>
                   <li><a href="deconnexion.php"><input type="button" class="btn btn-success btn btn-success" value="Déconnexion"></a></li>
@@ -60,37 +92,44 @@
             </div>
           </div>
 
+          <div class="container">
+
+    <div class="col-sm-8 blog-main">
 
 
-          <div class="inner cover">
-            <h1 class="cover-heading">Mobilisez vous</h1>
-            <p class="lead">Vous pouvez ici signer des pétitions ou encore en créer !</p>
-            <p class="lead">
-              <a href="connexion2.php" class="btn btn-lg btn-default">Créer votre pétition</a>
-              <a href="Petitions.php" class="btn btn-lg btn-default">Signez des pétitions</a>
-            </p>
-          </div>
 
-          <div class="mastfoot">
-            <div class="inner">
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  <div class="blog-header">
+    <?php echo '<h1 class="blog-title">' . htmlspecialchars($titre) . '</h1>'; ?>
+    <?php echo '<p class="lead blog-description">' . htmlspecialchars($texte) . '</p>'; ?>
+  </div>
 
 
+  <div class="row">
+
+      <form method="post" action="Signe.php">
+        <p>Cette pétition compte déjà <?php echo $resultat['Signatures']; ?> signatures, toi aussi viens apporter ta contribution !</p>
+        <input type="hidden" name="id" value="<?php echo $id ?>" />
+        <input type="hidden" name="titre" value="<?php echo $titre ?>" />
+        <button type="submit" class="btn btn-lg btn-success">Je signe !</button>
+      </form>
+
+    </div><!-- /.blog-main -->
+
+<?php
+}
+else {
+  header('Location: Signe.html');
+}
+ ?>
+
+
+
+  </div><!-- /.row -->
+
+</div><!-- /.container -->
+
+</div>
+</div>
+</div>
 </body>
 </html>

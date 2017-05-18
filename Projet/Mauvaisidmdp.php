@@ -109,8 +109,10 @@ else
               <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-1">
 
-                  <h1>Ma Pétition</h1>
-                  <h2>Parce que mon avis compte aussi</h2>
+
+                  <div class="alert alert-danger">
+                    <strong>Attention !</strong> Mot de passe ou identifiant incorrect.
+                  </div>
 
                   <form method="post">
                     <div class="form-group">

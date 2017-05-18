@@ -16,19 +16,59 @@ if(!empty($_POST['titre']))
   $pseudo=$_SESSION['pseudo'];
   $categorie=$_POST['categorie'];
 
+  /*//Premiere partie tu récupère le nom de l'image :
+  $image = basename($_FILES['image']['name']);
+  //Ensuite tu fais ton système d'upload
+  //Tu vérifie d'abord, si c'est bien une image comme suis :
+  $dossier = '/Image';'<br>' .$extensions = array('.png', '.gif', '.jpg', '.jpeg');
+  $extension = strrchr($_FILES['image']['name'], '.');
+    //Tu fais les vérifications nécéssaires
+    if(!in_array($extension, $extensions))
+    //Si l'extension n'est pas dans le tableau
+    {
+      $erreur = 'Vous devez uploader un fichier de type png, gif, jpg ou jpeg...';
+    }
+    //S'il n'y a pas d'erreur
+    if(!isset($erreur)) //S'il n'y a pas d'erreur, on upload
+    {
+      //On formate le nom du fichier ici...
+      $fichier = strtr($fichier,
+            'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ',
+            'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
+      $fichier = preg_replace('/([^.a-z0-9]+)/i', '-', $fichier);
+      if(move_uploaded_file($_FILES['image']['tmp_name'], $dossier . $fichier))
+ //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
+     {
+//La tu insère le nom du fichier dans ta table*/
+$req = $bdd->prepare('INSERT INTO petitions (id, Titre, Texte, Createur, Categorie)
+VALUES(NULL, :titre, :petition, :createur, :categorie)') or die(print_r($bdd->errorInfo()));
+$req->bindValue(':titre', $titre, PDO::PARAM_STR);
+$req->bindValue(':petition', $petition, PDO::PARAM_STR);
+$req->bindValue(':createur', $pseudo, PDO::PARAM_STR);
+$req->bindValue(':categorie', $categorie, PDO::PARAM_STR);
+$req->execute();
+/*}
+ else
+ //Sinon (la fonction renvoie FALSE.
+     {
 
-  $req = $bdd->prepare('INSERT INTO petitions (id, Titre, Texte, Createur, Categorie) VALUES(NULL, :titre, :petition, :createur, :categorie)') or die(print_r($bdd->errorInfo()));
-  $req->bindValue(':titre', $titre, PDO::PARAM_STR);
-  $req->bindValue(':petition', $petition, PDO::PARAM_STR);
-  $req->bindValue(':createur', $pseudo, PDO::PARAM_STR);
-  $req->bindValue(':categorie', $categorie, PDO::PARAM_STR);
-  $req->execute();
-
-  include ("functions.php");
-  if ( isset($_FILES['fic']) )
-  {
-    transfert();
-  }
+          echo 'Echec de l\'upload !';
+     }
+}*/
+/*else
+{
+     echo $erreur;
+}
+      // Le fichier a bien été reçu
+*/
+      /*$req = $bdd->prepare('INSERT INTO petitions (id, Titre, Texte, Createur, Categorie, img_nom)
+      VALUES(NULL, :titre, :petition, :createur, :categorie, :img_nom)') or die(print_r($bdd->errorInfo()));
+      $req->bindValue(':titre', $titre, PDO::PARAM_STR);
+      $req->bindValue(':petition', $petition, PDO::PARAM_STR);
+      $req->bindValue(':createur', $pseudo, PDO::PARAM_STR);
+      $req->bindValue(':categorie', $categorie, PDO::PARAM_STR);
+      $req->bindValue(':img_nom', $img_nom, PDO::PARAM_STR);
+      $req->execute();*/
 
   header('Location: /Projet/Petitions.php');
 }
@@ -109,18 +149,17 @@ if(!empty($_POST['titre']))
               <option value="education">Pétition Education</option>
               <option value="environment">Pétition Environment</option>
               <option value="sport">Pétition Sport</option>
-              <option value="nouvelle">Nouvelle Catégorie</option>
             </select>
           </div>
           <div class="form-group">
             <label for="exampleTextarea">Votre Pétition</label>
             <textarea name="text" class="form-control" id="exampleTextarea" rows="3">Ecrivez votre Pétition...</textarea>
           </div>
-          <div class="form-group">
+          <!--<div class="form-group">
             <label for="exampleTextarea">Ajoutez une image</label>
             <input type="hidden" name="MAX_FILE_SIZE" value="250000" />
             <input type="file" name="fic" size=50 />
-          </div>
+          </div>-->
           <button type="submit" class="btn btn-primary">Soumettre</button>
         </form>
 

@@ -83,23 +83,28 @@
               die('Erreur : ' . $e->getMessage());
       }
 
-      $pet=$bdd->query('SELECT Titre, Texte FROM petitions ORDER BY ID DESC LIMIT 0, 3');
+      $pet=$bdd->query('SELECT id, Titre, Texte FROM petitions ORDER BY ID DESC LIMIT 0, 3');
 
       while ($donnees = $pet->fetch())
       {
         ?>
-
+        <form action="Pagepetition.php" method="post">
         <div class="col-sm-6 col-md-4">
           <div class="thumbnail">
             <!-- <div style=" width: 242px; height: 200px; background:url(usain-bolt-pose2.jpg); background-size: cover"></div> -->
-            <img src="usain-bolt-pose2.jpg" alt="erreur">
+            <img src="manif.jpg" alt="erreur">
             <div class="caption">
+              <input type="hidden" name="id" value="<?php echo $donnees['id'] ?>" />
+              <input type="hidden" name="titre" value="<?php echo $donnees['Titre'] ?>" />
+              <input type="hidden" name="texte" value="<?php echo $donnees['Texte'] ?>" />
               <?php echo '<h3>' . htmlspecialchars($donnees['Titre']) . '</h3>'; ?>
               <?php echo '<p>' . htmlspecialchars(substr($donnees['Texte'],0,100)) . '</p>'; ?>
-              <p><a href="#" class="btn btn-primary" role="button">Consulter</a> <a href="#" class="btn btn-default" role="button">Modifier</a></p>
+              <button type="submit" class="btn btn-primary">Consulter</button>
             </div>
           </div>
         </div>
+        </form>
+
 
         <?php
         }

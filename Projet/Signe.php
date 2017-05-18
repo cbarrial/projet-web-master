@@ -1,7 +1,5 @@
 <?php
-if(!empty($_POST['pseudo']))
-{
-
+if (!empty($_POST['id'])){
 try
 {
   $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
@@ -11,35 +9,15 @@ catch (Exception $e)
         die('Erreur : ' . $e->getMessage());
 }
 
+$id=$_POST['id'];
+$titre=$_POST['titre'];
 
-$pseudo=$_POST['pseudo'];
-$passe=sha1($_POST['passe']);
-
-// Vérification des identifiants
-$req = $bdd->prepare('SELECT id FROM validation WHERE pseudo = :pseudo AND passe = :passe');
-//$req->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
-//$req->bindValue(':pseudo', $passe, PDO::PARAM_STR);
-//$req->execute();
+$req= $bdd->prepare('UPDATE petitions SET Signatures=Signatures+1 WHERE id=:id');
 $req->execute(array(
-    'pseudo' => $pseudo,
-    'passe' => $passe));
+    'id' => $id));
 
-$resultat=$req->fetch();
-
-if (!$resultat)
-{
-  header('Location: /Projet/Mauvaisidmdp.php');
-}
-else
-{
-  session_start();
-  $_SESSION['id'] = $resultat['id'];
-  $_SESSION['pseudo'] = $pseudo;
-  header('Location: /Projet/connecté.html');
-}
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -78,7 +56,7 @@ else
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-<body>
+<body background = "/net/t/cbarrial/Prog_Web/Projet/manif.jpg">
 
     <div class="site-wrapper">
       <div class="site-wrapper-inner">
@@ -92,7 +70,7 @@ else
                 <ul class="nav masthead-nav">
                   <li role="presentation"><a href="pageacceuil.php">Accueil</a></li>
                   <li role="presentation"><a href="Petitions.php">Parcourir</a></li>
-                  <li role="presentation" class="active"><a href="#">Connexion</a></li>
+                  <li role="presentation" class="active"><a href="connexion2.php">Connexion</a></li>
                   <li role="presentation"><a href="inscription2.php">Inscription</a></li>
                   <li><a href="deconnexion.php"><input type="button" class="btn btn-success btn btn-success" value="Déconnexion"></a></li>
                 </ul>
@@ -109,24 +87,8 @@ else
               <div class="row">
                 <div class="col-xs-12 col-sm-6 col-sm-offset-1">
 
-                  <h1>Ma Pétition</h1>
-                  <h2>Parce que mon avis compte aussi</h2>
+                  <h1>Vous avez bien signé la pétition <?php echo $titre; ?> !</h1>
 
-                  <form method="post">
-                    <div class="form-group">
-                      <div class="col-md-8"><input  placeholder="Idenfiant" class="form-control" type="text" id="UserUsername" name="pseudo"/></div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="col-md-8"><input placeholder="Mot de passe" class="form-control" type="password" id="UserPassword" name="passe"/></div>
-                    </div>
-
-                    <div class="form-group">
-                      <input  class="btn btn-success btn btn-success" type="submit" value="Connexion"/></div>
-                      <a href="inscription2.php" class="btn btn-primary btn btn-primary">Je m'inscris</a>
-                    </div>
-
-                  </form>
 
                 </div>
               </div>
@@ -135,8 +97,6 @@ else
           </div>
   </div>
   </div>
-
-
 
           <div class="mastfoot">
             <div class="inner">
@@ -148,6 +108,7 @@ else
       </div>
 
     </div>
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

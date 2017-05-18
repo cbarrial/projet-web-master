@@ -28,7 +28,7 @@ $resultat=$req->fetch();
 
 if (!$resultat)
 {
-  header('Location: /Projet/Mauvaisidmdp.php');
+echo 'Mauvais identifiant ou mot de passe !';
 }
 else
 {
@@ -122,12 +122,13 @@ else
                     </div>
 
                     <div class="form-group">
-                      <input  class="btn btn-success btn btn-success" type="submit" value="Connexion"/></div>
-                      <a href="inscription2.php" class="btn btn-primary btn btn-primary">Je m'inscris</a>
+                      <div class="col-md-offset-0 col-md-8"><input  class="btn btn-success btn btn-success" type="submit" value="Connexion"/></div>
                     </div>
 
                   </form>
 
+
+                  <p class="credits">Développé par <a href="http://www.monsite.com" target="_blank">une super agence</a>.</p>
                 </div>
               </div>
 

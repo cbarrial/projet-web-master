@@ -10,7 +10,7 @@
     }
     catch (Exception $e)
     {
-            die('Erreur : ' . $e->getMessage());
+        die('Erreur : ' . $e->getMessage());
     }
   }
 
@@ -49,8 +49,8 @@
                   die('Erreur : ' . $e->getMessage());
           }
 
-          $req =$bdd->prepare( "INSERT INTO image (img_id, img_nom, img_taille, img_type, img_blob)
-                              VALUES (NULL, :img_nom, :img_taille, :img_type, :img_blob, addslashes ($img_blob)) ");
+          $req =$bdd->prepare( "INSERT INTO petitions  (img_nom, img_taille, img_type, img_blob)
+                              VALUES (:img_nom, :img_taille, :img_type, :img_blob, addslashes ($img_blob)) ");
           $req->bindValue(':img_nom', $img_nom, PDO::PARAM_STR);
           $req->bindValue(':img_taille', $img_taille, PDO::PARAM_STR);
           $req->bindValue(':img_type', $img_type, PDO::PARAM_STR);

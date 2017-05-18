@@ -1,45 +1,3 @@
-<?php
-if(!empty($_POST['pseudo']))
-{
-
-try
-{
-  $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
-}
-catch (Exception $e)
-{
-        die('Erreur : ' . $e->getMessage());
-}
-
-
-$pseudo=$_POST['pseudo'];
-$passe=sha1($_POST['passe']);
-
-// Vérification des identifiants
-$req = $bdd->prepare('SELECT id FROM validation WHERE pseudo = :pseudo AND passe = :passe');
-//$req->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
-//$req->bindValue(':pseudo', $passe, PDO::PARAM_STR);
-//$req->execute();
-$req->execute(array(
-    'pseudo' => $pseudo,
-    'passe' => $passe));
-
-$resultat=$req->fetch();
-
-if (!$resultat)
-{
-  header('Location: /Projet/Mauvaisidmdp.php');
-}
-else
-{
-  session_start();
-  $_SESSION['id'] = $resultat['id'];
-  $_SESSION['pseudo'] = $pseudo;
-  header('Location: /Projet/connecté.html');
-}
-}
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -78,7 +36,7 @@ else
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-<body>
+<body background = "/net/t/cbarrial/Prog_Web/Projet/manif.jpg">
 
     <div class="site-wrapper">
       <div class="site-wrapper-inner">
@@ -90,11 +48,10 @@ else
               <h3 class="masthead-brand">Pétitions</h3>
               <nav>
                 <ul class="nav masthead-nav">
-                  <li role="presentation"><a href="pageacceuil.php">Accueil</a></li>
-                  <li role="presentation"><a href="Petitions.php">Parcourir</a></li>
-                  <li role="presentation" class="active"><a href="#">Connexion</a></li>
-                  <li role="presentation"><a href="inscription2.php">Inscription</a></li>
-                  <li><a href="deconnexion.php"><input type="button" class="btn btn-success btn btn-success" value="Déconnexion"></a></li>
+                  <li role="presentation"><a href="pageacceuil.html">Accueil</a></li>
+                  <li role="presentation"><a href="decpet.html">Parcourir</a></li>
+                  <li role="presentation" class="active"><a href="connexion2.html">Connexion</a></li>
+                  <li role="presentation"><a href="inscription.html">Inscription</a></li>
                 </ul>
               </nav>
             </div>
@@ -112,22 +69,21 @@ else
                   <h1>Ma Pétition</h1>
                   <h2>Parce que mon avis compte aussi</h2>
 
-                  <form method="post">
+                  <form action="/users/login" name="login" role="form" class="form-horizontal" method="post" accept-charset="utf-8">
                     <div class="form-group">
-                      <div class="col-md-8"><input  placeholder="Idenfiant" class="form-control" type="text" id="UserUsername" name="pseudo"/></div>
+                      <div class="col-md-8"><input name="username" placeholder="Idenfiant" class="form-control" type="text" id="UserUsername"/></div>
                     </div>
 
                     <div class="form-group">
-                      <div class="col-md-8"><input placeholder="Mot de passe" class="form-control" type="password" id="UserPassword" name="passe"/></div>
+                      <div class="col-md-8"><input name="password" placeholder="Mot de passe" class="form-control" type="password" id="UserPassword"/></div>
                     </div>
 
                     <div class="form-group">
-                      <input  class="btn btn-success btn btn-success" type="submit" value="Connexion"/></div>
-                      <a href="inscription2.php" class="btn btn-primary btn btn-primary">Je m'inscris</a>
+                      <div class="col-md-offset-0 col-md-8"><input  class="btn btn-success btn btn-success" type="submit" value="Connexion"/></div>
                     </div>
 
                   </form>
-
+                  <p class="credits">Développé par <a href="http://www.monsite.com" target="_blank">une super agence</a>.</p>
                 </div>
               </div>
 
@@ -135,8 +91,6 @@ else
           </div>
   </div>
   </div>
-
-
 
           <div class="mastfoot">
             <div class="inner">
@@ -148,6 +102,30 @@ else
       </div>
 
     </div>
+
+    <?php
+    // Le mot de passe n'a pas été envoyé
+    if (!isset($_POST['mot_de_passe']))
+    {
+      echo '<p>Vous n\'avez pas rentré de mot de passe !</p>';
+    }
+    // Le mot de passe a été envoyé et il est pas bon
+  elseif ($_POST['mot_de_passe'] !="kangourou")
+  {
+
+    echo '<p>Le mot de passe est incorrect !</p>';
+  }
+  // Le mot de passe a été envoyé et il est bon
+  else
+  {
+    ?>
+        <h1>Voici les codes d'accès :<h1>
+        <p><strong>CRD5-GTFT-CK65-JOPM-V29N-24G1-HH28-LLFV</strong></p>
+
+        <p> Cette page est réservé au personnel !</p>
+        <?php
+      }
+      ?>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

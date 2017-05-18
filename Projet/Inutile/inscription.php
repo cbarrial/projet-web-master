@@ -1,48 +1,19 @@
+<!DOCTYPE html>
+
 <?php
-include("functions.php");
+// Vérification de la validité des informations
 
-if(!empty($_POST['pseudo']))
-{
-  // D'abord, je me connecte à la base de données.
-  try
-  {
-    $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
-  }
-  catch (Exception $e)
-  {
-          die('Erreur : ' . $e->getMessage());
-  }
-  // Je mets aussi certaines sécurités ici…
-  $passe = $_POST['passe'];
-  $passe2 = $_POST['passe2'];
+// Hachage du mot de passe
+$pass_hache = sha1($_POST['pass']);
 
-  if($passe == $passe2)
-  {
-    $nom = $_POST['nom'];
-    $pseudo = $_POST['pseudo'];
-    $email = $_POST['email'];
-
-    // Je vais crypter le mot de passe.
-    $passe = sha1($passe);
-    // Insertion du message à l'aide d'une requête préparée
-    $req = $bdd->prepare('INSERT INTO validation (id, nom, pseudo, passe, email) VALUES(NULL, :nom, :pseudo, :passe, :email)');
-    $req->bindValue(':nom', $nom, PDO::PARAM_INT);
-    $req->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
-    $req->bindValue(':passe', $passe, PDO::PARAM_STR);
-    $req->bindValue(':email', $email, PDO::PARAM_STR);
-    $req->execute();
-
-    //Le champ id est en auto_increment, on met donc '' dans le premier champ
-  header('Location: /Projet/pageacceuilins.php');
-  }
-  else
-  {
-    echo 'Les deux mots de passe que vous avez rentrés ne correspondent pas…';
-  }
-}
-
+// Insertion
+$req = $bdd->prepare('INSERT INTO membres(pseudo, pass, email, date_inscription) VALUES(:pseudo, :pass, :email, CURDATE())');
+$req->execute(array(
+    'pseudo' => $pseudo,
+    'pass' => $pass_hache,
+    'email' => $email));
 ?>
- <!DOCTYPE html>
+
 <html lang="fr">
 <head>
   <meta charset="utf-8">
@@ -80,9 +51,10 @@ if(!empty($_POST['pseudo']))
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-<body>
+<body background = "/net/t/cbarrial/Prog_Web/Projet/inscrip.jpg">
 
     <div class="site-wrapper">
+    
       <div class="site-wrapper-inner">
 
         <div class="cover-container">
@@ -92,16 +64,14 @@ if(!empty($_POST['pseudo']))
               <h3 class="masthead-brand">Pétitions</h3>
               <nav>
                 <ul class="nav masthead-nav">
-                  <li role="presentation"><a href="pageacceuil.php">Accueil</a></li>
-                  <li role="presentation"><a href="Petitions.php">Parcourir</a></li>
-                  <li role="presentation"><a href="connexion2.php">Connexion</a></li>
-                  <li role="presentation" class="active"><a href="inscription2.php">Inscription</a></li>
-                  <li><a href="deconnexion.php"><input type="button" class="btn btn-success btn btn-success" value="Déconnexion"></a></li>
+                  <li role="presentation"><a href="pageacceuil.html">Accueil</a></li>
+                  <li role="presentation"><a href="decpet.html">Parcourir</a></li>
+                  <li role="presentation"><a href="connexion2.html">Connexion</a></li>
+                  <li role="presentation" class="active"><a href="inscription.html">Inscription</a></li>
                 </ul>
               </nav>
             </div>
           </div>
-
 
           <div class="container">
 
@@ -111,18 +81,17 @@ if(!empty($_POST['pseudo']))
               </div>
             </div>
 
-    <form method="post">
     <div class="row">
     <div class="col-md-offset-1 col-md-3">
     <div class="form-group">
       <label for="Nom">Nom</label>
-      <input type="text" class="form-control" id="nom" placeholder="Nom" name="nom">
+      <input type="text" class="form-control" id="nom" placeholder="Nom">
     </div>
     </div>
     <div class="col-md-offset-1 col-md-3">
       <div class="form-group">
-        <label for="Prenom">Pseudo</label>
-    <input type="text" class="form-control" id="prenom" placeholder="Pseudo" name="pseudo">
+        <label for="Prenom">Prénom</label>
+    <input type="text" class="form-control" id="prenom" placeholder="Prénom">
     </div>
     </div>
     </div>
@@ -131,7 +100,7 @@ if(!empty($_POST['pseudo']))
       <div class="col-md-offset-1 col-md-7">
         <div class="form-group">
           <label for="Email">Email address</label>
-          <input type="text" class="form-control" id="email" placeholder="Enter email" name="email">
+          <input type="text" class="form-control" id="email" placeholder="Enter email">
         </div>
       </div>
     </div>
@@ -140,13 +109,13 @@ if(!empty($_POST['pseudo']))
       <div class="col-md-offset-1 col-md-3">
         <div class="form-group">
           <label for="Password">Mot de passe</label>
-          <input type="password" class="form-control" id="password" placeholder="Mot de passe" name="passe">
+          <input type="password" class="form-control" id="password" placeholder="Mot de passe">
         </div>
       </div>
       <div class="col-md-offset-1 col-md-3">
         <div class="form-group">
           <label for="Vpassword">Vérification mot de passe</label>
-          <input type="password" class="form-control" id="vpassword" placeholder="Vérification mot de passe" name="passe2">
+          <input type="password" class="form-control" id="vpassword" placeholder="Vérification mot de passe">
         </div>
       </div>
     </div>
@@ -167,54 +136,12 @@ if(!empty($_POST['pseudo']))
     <br/>
     <div class="row">
       <div class="col-md-offset-5 col-md-1">
-        <button type="submit" class="btn btn-primary">Envoyer mes informations</button>
+        <button type="button" class="btn btn-primary">Envoyer mes informations</button>
       </div>
     </div>
 
     </div>
-  </form>
 
-  <?php
-  /*if(!empty($_POST['pseudo']))
-  {
-    // D'abord, je me connecte à la base de données.
-    try
-    {
-    	$bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
-    }
-    catch (Exception $e)
-    {
-            die('Erreur : ' . $e->getMessage());
-    }
-    // Je mets aussi certaines sécurités ici…
-    $passe = $_POST['passe'];
-    $passe2 = $_POST['passe2'];
-
-    if($passe == $passe2)
-    {
-      $nom = $_POST['nom'];
-      $pseudo = $_POST['pseudo'];
-      $email = $_POST['email'];
-
-      // Je vais crypter le mot de passe.
-      $passe = sha1($passe);
-      // Insertion du message à l'aide d'une requête préparée
-      $req = $bdd->prepare('INSERT INTO validation (id, nom, pseudo, passe, email) VALUES(NULL, :nom, :pseudo, :passe, :email)');
-      $req->bindValue(':nom', $nom, PDO::PARAM_INT);
-      $req->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
-  	  $req->bindValue(':passe', $passe, PDO::PARAM_STR);
-  	  $req->bindValue(':email', $email, PDO::PARAM_STR);
-      $req->execute();
-
-      //Le champ id est en auto_increment, on met donc '' dans le premier champ
-      echo 'Vous êtes bien inscrit';
-    }
-    else
-    {
-      echo 'Les deux mots de passe que vous avez rentrés ne correspondent pas…';
-    }
-  }*/
-  ?>
 
           <div class="mastfoot">
             <div class="inner">
