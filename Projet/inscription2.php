@@ -1,21 +1,17 @@
 <?php
-include("functions.php");
 
-if(!empty($_POST['pseudo']))
-{
+//On vérifie que l'utilisateur ait bien remplit le formulaire
+if(!empty($_POST['pseudo'])){
+if(!empty($_POST['passe'])){
+if(!empty($_POST['passe2'])){
+
   // D'abord, je me connecte à la base de données.
-  try
-  {
-    $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
-  }
-  catch (Exception $e)
-  {
-          die('Erreur : ' . $e->getMessage());
-  }
-  // Je mets aussi certaines sécurités ici…
+include ("connectMaBase.php");
+
   $passe = $_POST['passe'];
   $passe2 = $_POST['passe2'];
 
+  //On vérifie que les deux mots de passe soient les mêmes
   if($passe == $passe2)
   {
     $nom = $_POST['nom'];
@@ -24,7 +20,7 @@ if(!empty($_POST['pseudo']))
 
     // Je vais crypter le mot de passe.
     $passe = sha1($passe);
-    // Insertion du message à l'aide d'une requête préparée
+    // Insertion du nouvel utilisateur à l'aide d'une requête préparée
     $req = $bdd->prepare('INSERT INTO validation (id, nom, pseudo, passe, email) VALUES(NULL, :nom, :pseudo, :passe, :email)');
     $req->bindValue(':nom', $nom, PDO::PARAM_INT);
     $req->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
@@ -32,55 +28,46 @@ if(!empty($_POST['pseudo']))
     $req->bindValue(':email', $email, PDO::PARAM_STR);
     $req->execute();
 
-    //Le champ id est en auto_increment, on met donc '' dans le premier champ
   header('Location: /Projet/pageacceuilins.php');
   }
   else
   {
-    echo 'Les deux mots de passe que vous avez rentrés ne correspondent pas…';
+    echo '<div class="alert alert-danger"> <strong>Attention !</strong>Les deux mots de passes sont différents.</div>';
   }
+}
+}
 }
 
 ?>
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
+  <!-- Importation des fichiers css -->
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
   <link rel="stylesheet" type="text/css" href="cover.css"><!DOCTYPE html>
-  <title> Skyblog </title>
+  <title> Pétitions </title>
 </head>
 <head>
+    <!-- Importation des templates de Bootstrap -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
+
     <link rel="icon" href="../../favicon.ico">
-
-    <title>Cover Template for Bootstrap</title>
-
-    <!-- Bootstrap core CSS -->
     <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
     <link href="http://getbootstrap.com/examples/cover/cover.css" rel="stylesheet">
+    <link href="cover2.css" rel="stylesheet">
+    <link href="cover.css" rel="stylesheet">
 
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
     <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
-<body>
+  <body>
 
     <div class="site-wrapper">
       <div class="site-wrapper-inner">
@@ -151,18 +138,6 @@ if(!empty($_POST['pseudo']))
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-offset-1 col-md-3">
-        <div class="input-group">
-          <span class="input-group-addon glyphicon glyphicon-earphone"></span>
-          <input type="text" class="form-control" placeholder="Téléphone" aria-describedby="basic-addon1">
-        </div>
-        <div class="input-group">
-          <span class="input-group-addon glyphicon glyphicon-globe"></span>
-          <input type="text" class="form-control" placeholder="Adresse" aria-describedby="basic-addon1">
-        </div>
-      </div>
-    </div>
 
     <br/>
     <div class="row">
@@ -174,47 +149,6 @@ if(!empty($_POST['pseudo']))
     </div>
   </form>
 
-  <?php
-  /*if(!empty($_POST['pseudo']))
-  {
-    // D'abord, je me connecte à la base de données.
-    try
-    {
-    	$bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
-    }
-    catch (Exception $e)
-    {
-            die('Erreur : ' . $e->getMessage());
-    }
-    // Je mets aussi certaines sécurités ici…
-    $passe = $_POST['passe'];
-    $passe2 = $_POST['passe2'];
-
-    if($passe == $passe2)
-    {
-      $nom = $_POST['nom'];
-      $pseudo = $_POST['pseudo'];
-      $email = $_POST['email'];
-
-      // Je vais crypter le mot de passe.
-      $passe = sha1($passe);
-      // Insertion du message à l'aide d'une requête préparée
-      $req = $bdd->prepare('INSERT INTO validation (id, nom, pseudo, passe, email) VALUES(NULL, :nom, :pseudo, :passe, :email)');
-      $req->bindValue(':nom', $nom, PDO::PARAM_INT);
-      $req->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
-  	  $req->bindValue(':passe', $passe, PDO::PARAM_STR);
-  	  $req->bindValue(':email', $email, PDO::PARAM_STR);
-      $req->execute();
-
-      //Le champ id est en auto_increment, on met donc '' dans le premier champ
-      echo 'Vous êtes bien inscrit';
-    }
-    else
-    {
-      echo 'Les deux mots de passe que vous avez rentrés ne correspondent pas…';
-    }
-  }*/
-  ?>
 
           <div class="mastfoot">
             <div class="inner">

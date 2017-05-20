@@ -1,75 +1,29 @@
 <?php
+//On ouvre la session
 session_start();
-if(!empty($_POST['titre']))
-{
-  try
-  {
-    $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
-  }
-  catch (Exception $e)
-  {
-          die('Erreur : ' . $e->getMessage());
-  }
 
+//On vérifie que le formulaire soit bien remplie et l'utilisateur connecté
+if(!empty($_POST['titre'] AND $_POST['text'] AND $_SESSION['pseudo']))
+{
+  //Connexion à la bdd
+  include("connectMaBase.php");
+
+  // Initialisation des variables
   $titre=$_POST['titre'];
   $petition=$_POST['text'];
   $pseudo=$_SESSION['pseudo'];
   $categorie=$_POST['categorie'];
 
-  /*//Premiere partie tu récupère le nom de l'image :
-  $image = basename($_FILES['image']['name']);
-  //Ensuite tu fais ton système d'upload
-  //Tu vérifie d'abord, si c'est bien une image comme suis :
-  $dossier = '/Image';'<br>' .$extensions = array('.png', '.gif', '.jpg', '.jpeg');
-  $extension = strrchr($_FILES['image']['name'], '.');
-    //Tu fais les vérifications nécéssaires
-    if(!in_array($extension, $extensions))
-    //Si l'extension n'est pas dans le tableau
-    {
-      $erreur = 'Vous devez uploader un fichier de type png, gif, jpg ou jpeg...';
-    }
-    //S'il n'y a pas d'erreur
-    if(!isset($erreur)) //S'il n'y a pas d'erreur, on upload
-    {
-      //On formate le nom du fichier ici...
-      $fichier = strtr($fichier,
-            'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ',
-            'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
-      $fichier = preg_replace('/([^.a-z0-9]+)/i', '-', $fichier);
-      if(move_uploaded_file($_FILES['image']['tmp_name'], $dossier . $fichier))
- //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
-     {
-//La tu insère le nom du fichier dans ta table*/
+// Ajout de la pétition à la bdd
 $req = $bdd->prepare('INSERT INTO petitions (id, Titre, Texte, Createur, Categorie)
-VALUES(NULL, :titre, :petition, :createur, :categorie)') or die(print_r($bdd->errorInfo()));
+                      VALUES(NULL, :titre, :petition, :createur, :categorie)') or die(print_r($bdd->errorInfo()));
 $req->bindValue(':titre', $titre, PDO::PARAM_STR);
 $req->bindValue(':petition', $petition, PDO::PARAM_STR);
 $req->bindValue(':createur', $pseudo, PDO::PARAM_STR);
 $req->bindValue(':categorie', $categorie, PDO::PARAM_STR);
 $req->execute();
-/*}
- else
- //Sinon (la fonction renvoie FALSE.
-     {
 
-          echo 'Echec de l\'upload !';
-     }
-}*/
-/*else
-{
-     echo $erreur;
-}
-      // Le fichier a bien été reçu
-*/
-      /*$req = $bdd->prepare('INSERT INTO petitions (id, Titre, Texte, Createur, Categorie, img_nom)
-      VALUES(NULL, :titre, :petition, :createur, :categorie, :img_nom)') or die(print_r($bdd->errorInfo()));
-      $req->bindValue(':titre', $titre, PDO::PARAM_STR);
-      $req->bindValue(':petition', $petition, PDO::PARAM_STR);
-      $req->bindValue(':createur', $pseudo, PDO::PARAM_STR);
-      $req->bindValue(':categorie', $categorie, PDO::PARAM_STR);
-      $req->bindValue(':img_nom', $img_nom, PDO::PARAM_STR);
-      $req->execute();*/
-
+  //Redirection vers la page de pétitions
   header('Location: /Projet/Petitions.php');
 }
 
@@ -77,43 +31,30 @@ $req->execute();
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <!-- Importation des fichiers css -->
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-  <link rel="stylesheet" type="text/css" href="stylesheet.css"><!DOCTYPE html>
-  <title> Skyblog </title>
+  <link rel="stylesheet" type="text/css" href="cover.css"><!DOCTYPE html>
+  <title> Pétitions </title>
 </head>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <link rel="icon" href="../../favicon.ico">
+    <!-- Importation des templates de Bootstrap -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>Cover Template for Bootstrap</title>
+    <link rel="icon" href="../../favicon.ico">
+    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/cover/cover.css" rel="stylesheet">
+    <link href="cover2.css" rel="stylesheet">
+    <link href="cover.css" rel="stylesheet">
 
-  <!-- Bootstrap core CSS -->
-  <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
-  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-  <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-  <!-- Custom styles for this template -->
-  <link href="cover2.css" rel="stylesheet">
-  <link href="cover.css" rel="stylesheet">
-
-
-  <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-  <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-  <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-</head>
+  </head>
 <body>
 
   <div class="site-wrapper">
@@ -130,6 +71,7 @@ $req->execute();
                 <li role="presentation"><a href="Petitions.php">Parcourir</a></li>
                 <li role="presentation"><a href="connexion2.php">Connexion</a></li>
                 <li><a href="inscription2.php">Inscription</a></li>
+                <li><a href="deconnexion.php"><input type="button" class="btn btn-success btn btn-success" value="Déconnexion"></a></li>
               </ul>
             </nav>
           </div>
@@ -155,11 +97,7 @@ $req->execute();
             <label for="exampleTextarea">Votre Pétition</label>
             <textarea name="text" class="form-control" id="exampleTextarea" rows="3">Ecrivez votre Pétition...</textarea>
           </div>
-          <!--<div class="form-group">
-            <label for="exampleTextarea">Ajoutez une image</label>
-            <input type="hidden" name="MAX_FILE_SIZE" value="250000" />
-            <input type="file" name="fic" size=50 />
-          </div>-->
+
           <button type="submit" class="btn btn-primary">Soumettre</button>
         </form>
 
@@ -175,13 +113,9 @@ $req->execute();
 
   </div>
 
-  <!-- Bootstrap core JavaScript
-  ================================================== -->
-  <!-- Placed at the end of the document so the pages load faster -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
   <script src="../../dist/js/bootstrap.min.js"></script>
-  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 
 

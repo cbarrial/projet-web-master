@@ -1,27 +1,36 @@
 <?php
 session_start();
-include("functions.php");
 
+// Si l'utilisateur n'est pas connecté
 if (empty($_SESSION['id'] OR $_SESSION['pseudo']))
-{                                                         //Cette ligne fait buguer la page donc corrige fdp
+{
   header('Location: /Projet/connexion.php');
 }
 
+// Connexion à la base de données
+include("connectMaBase.php");
 
-try
-{
-  $bdd = new PDO('mysql:host=localhost;dbname=petition;charset=utf8', 'root', '');
-}
-catch (Exception $e)
-{
-        die('Erreur : ' . $e->getMessage());
-}
-
+//Si l'utilisateur clique sur le bouton je signe
 if (isset($_POST['id'])){
+
+//Initialisation des données
 $titre=$_POST['titre'];
 $texte=$_POST['texte'];
 $id=$_POST['id'];
+$iduser=$_SESSION['id'];
 
+//On cherche si l'utilisateur à déjà signé la pétition
+$req1=$bdd->prepare('SELECT id_sig FROM signatures WHERE id_user=:iduser AND id_pet=:id');
+$req1->bindValue(':iduser', $iduser, PDO::PARAM_INT);
+$req1->bindValue(':id', $id, PDO::PARAM_INT);
+$req1->execute();
+
+$test=$req1->fetch();
+
+//S'il ne l'a pas signé
+if (empty($test['id_sig'])){
+
+//On récupère le nombre de signatures qu'il y a déjà pour cette pétition
 $req=$bdd->prepare('SELECT Signatures FROM petitions WHERE id=:id');
 $req->bindValue(':id', $id, PDO::PARAM_INT);
 $req->execute();
@@ -33,42 +42,27 @@ $resultat=$req->fetch();
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <!-- Importation des fichiers css -->
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-  <link rel="stylesheet" type="text/css" href="stylesheet.css"><!DOCTYPE html>
-  <title> Skyblog </title>
+  <link rel="stylesheet" type="text/css" href="cover.css"><!DOCTYPE html>
+  <title> Pétitions </title>
 </head>
 <head>
+    <!-- Importation des templates de Bootstrap -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
+
     <link rel="icon" href="../../favicon.ico">
-
-    <title>Cover Template for Bootstrap</title>
-
-    <!-- Bootstrap core CSS -->
     <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/cover/cover.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="cover2.css" rel="stylesheet">
-    <!--<link href="cover.css" rel="stylesheet">-->
-
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
 <body>
 
@@ -99,6 +93,7 @@ $resultat=$req->fetch();
 
 
   <div class="blog-header">
+    <!-- On affiche le titre et le texte entier de la pétition dont l'utilisateur à cliqué sur consulter -->
     <?php echo '<h1 class="blog-title">' . htmlspecialchars($titre) . '</h1>'; ?>
     <?php echo '<p class="lead blog-description">' . htmlspecialchars($texte) . '</p>'; ?>
   </div>
@@ -107,7 +102,9 @@ $resultat=$req->fetch();
   <div class="row">
 
       <form method="post" action="Signe.php">
+        <!-- On affiche ici le nombre de signatures qui existent déjà pour la pétition -->
         <p>Cette pétition compte déjà <?php echo $resultat['Signatures']; ?> signatures, toi aussi viens apporter ta contribution !</p>
+        <!-- On implémente un formulaire que l'utilisateur ne voit pas pour renvoyer l'id et le titre de la pétition vers Signe.php -->
         <input type="hidden" name="id" value="<?php echo $id ?>" />
         <input type="hidden" name="titre" value="<?php echo $titre ?>" />
         <button type="submit" class="btn btn-lg btn-success">Je signe !</button>
@@ -117,8 +114,10 @@ $resultat=$req->fetch();
 
 <?php
 }
+//Si l'utilisateur à déjà signé la pétition
 else {
-  header('Location: Signe.html');
+  header('Location: DejaSigne.html');
+}
 }
  ?>
 
