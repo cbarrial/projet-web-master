@@ -3,8 +3,8 @@
 session_start();
 
 //On vérifie que le formulaire soit bien remplie et l'utilisateur connecté
-if(!empty($_POST['titre'] AND $_POST['text'] AND $_SESSION['pseudo']))
-{
+if(!empty($_POST['titre'])){
+
   //Connexion à la bdd
   include("connectMaBase.php");
 
@@ -13,14 +13,16 @@ if(!empty($_POST['titre'] AND $_POST['text'] AND $_SESSION['pseudo']))
   $petition=$_POST['text'];
   $pseudo=$_SESSION['pseudo'];
   $categorie=$_POST['categorie'];
+  $sig=0;
 
 // Ajout de la pétition à la bdd
-$req = $bdd->prepare('INSERT INTO petitions (id, Titre, Texte, Createur, Categorie)
-                      VALUES(NULL, :titre, :petition, :createur, :categorie)') or die(print_r($bdd->errorInfo()));
+$req = $bdd->prepare('INSERT INTO petitions (id, Titre, Texte, Createur, Categorie, Signatures)
+                      VALUES(NULL, :titre, :petition, :createur, :categorie, :signatures)') or die(print_r($bdd->errorInfo()));
 $req->bindValue(':titre', $titre, PDO::PARAM_STR);
 $req->bindValue(':petition', $petition, PDO::PARAM_STR);
 $req->bindValue(':createur', $pseudo, PDO::PARAM_STR);
 $req->bindValue(':categorie', $categorie, PDO::PARAM_STR);
+$req->bindValue(':signatures', $sig, PDO::PARAM_INT);
 $req->execute();
 
   //Redirection vers la page de pétitions
