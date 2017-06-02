@@ -26,7 +26,7 @@ $req->bindValue(':signatures', $sig, PDO::PARAM_INT);
 $req->execute();
 
   //Redirection vers la page de pétitions
-  header('Location: /Projet/Petitions.php');
+  header('Location: Petitions.php');
 }
 
 ?>

@@ -4,7 +4,7 @@ session_start();
 // Si l'utilisateur n'est pas connecté
 if (empty($_SESSION['id'] OR $_SESSION['pseudo']))
 {
-  header('Location: /Projet/connexion.php');
+  header('Location: connexion.php');
 }
 
 // Connexion à la base de données

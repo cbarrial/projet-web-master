@@ -4,7 +4,7 @@ session_start();
 // Si la personne n'est pas connecté elle est renvoyé vers pageacceuil.html
 if (empty($_SESSION['id'] OR $_SESSION['pseudo']))
 {
-  header('Location: /Projet/pageacceuil.html');
+  header('Location: pageacceuil.html');
 }
 
 ?>

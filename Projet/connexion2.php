@@ -23,7 +23,7 @@ $resultat=$req->fetch();
 // S'il n'existe pas
 if (!$resultat)
 {
-header('Location: /Projet/Mauvaisidmdp.php');
+header('Location: Mauvaisidmdp.php');
 }
 // S'il existe on ouvre une session
 else
@@ -31,7 +31,7 @@ else
   session_start();
   $_SESSION['id'] = $resultat['id'];
   $_SESSION['pseudo'] = $pseudo;
-  header('Location: /Projet/Petitions.php');
+  header('Location: Petitions.php');
 }
 }
 }
